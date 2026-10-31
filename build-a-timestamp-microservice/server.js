@@ -13,6 +13,29 @@ app.get("/", (_req, res) => {
 
 // Do not change code above this line
 
+app.get(/^\/api(?:\/([^/]+))?\/?$/, (req, res) => {
+  let date;
+
+  const inputDate = req.params[0];
+
+  if (inputDate === undefined) {
+    date = new Date();
+  } else if (!isNaN(inputDate)) {
+    date = new Date(Number(inputDate));
+  } else {
+    date = new Date(inputDate);
+  }
+
+  if (date.toString() === "Invalid Date") {
+    return res.json({ error: "Invalid Date" });
+  }
+
+  res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  });
+});
+
 // Do not change code below this line
 
 const PORT = 8000;
